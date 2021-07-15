@@ -20,7 +20,7 @@ def post():
     return Response(json.dumps({'Output': 'Hello World'}), mimetype='application/json', status=200)
     
     
-@application.route('/upload', methods=['POST'])
+@application.route('/upload', methods=['GET','POST'])
 def upload_s3():
     
     bucket = 'rekognition-jce'
@@ -40,7 +40,7 @@ def upload_s3():
         country = response['country']
         data = json.dumps(response)
         # to create a file the obdy needs to be of type bytes, hence the data.encode
-        s3.Bucket(bucket).put_object(Key=file_name, Body=data.encode('utf-8'))
+        s3.Bucket(bucket).put_object(Key=file_name, Body=file)
 
     return Response(detect_labels(bucket, file_name), mimetype='application/json', status=200)
 
