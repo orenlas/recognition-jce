@@ -20,27 +20,13 @@ def post():
     return Response(json.dumps({'Output': 'Hello World'}), mimetype='application/json', status=200)
     
     
-@application.route('/upload', methods=['GET','POST'])
+@application.route('/upload', methods=['POST'])
 def upload_s3():
-    
+    s3 = boto3.resource('s3', region_name = 'us-east-1')
+    file = request.files
     bucket = 'rekognition-jce'
     file_name = 'temp.txt'
-
-
-    s3 = boto3.resource('s3', region_name = 'us-east-1')
-    if request.files:
-        file = request.files['user_file']
-
-        s3.Bucket(bucket).put_object(Key=file_name, Body=file)
-    else:  
-        response = request.get_json() 
-        print(response)
-        bucket = response['bucket'] # 'loggereast1'
-
-        country = response['country']
-        data = json.dumps(response)
-        # to create a file the obdy needs to be of type bytes, hence the data.encode
-        s3.Bucket(bucket).put_object(Key=file_name, Body=file)
+    s3.Bucket(bucket).put_object(Key=file_name, Body=file)
 
     return Response(detect_labels(bucket, file_name), mimetype='application/json', status=200)
 
