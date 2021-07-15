@@ -26,7 +26,7 @@ def post():
 def analyze(bucket='rekognition-jce', image='person.jfif'):
     return detect_labels(bucket, image)
 
-# curl localhost:5000/analyze/my-upload-bucket-01/person.jpg
+# curl localhost:5000/analyze/rekogtnition-jce/person.jfif
 def detect_labels(bucket, key, max_labels=10, min_confidence=70, region="us-east-1"):
     rekognition = boto3.client("rekognition", region)
     s3 = boto3.resource('s3', region_name = 'us-east-1')
